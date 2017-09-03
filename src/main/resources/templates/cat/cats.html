@@ -1,0 +1,126 @@
+<div class="generic-container container-style">
+    <div class="panel panel-default panel-style">
+        <!-- Default panel contents -->
+        <div class="alert alert-success" role="alert" ng-if="successMessage">{{successMessage}}</div>
+        <div class="alert alert-danger" role="alert" ng-if="errorMessage">{{errorMessage}}</div>
+        <div class="panel-heading"><span class="lead">Add a new cat </span></div>
+        <div class="panel-body">
+            <div class="formcontainer">
+                <form ng-submit="submit()" name="myForm" class="form-horizontal">
+                    <div class="row">
+                        <div class="form-group col-md-6" ng-class="{ 'has-error' : myForm.fname.$invalid &amp;&amp; !myForm.fname.$pristine}">
+                            <label class="col-md-2 control-label">First name</label>
+                            <div class="col-md-9">
+                                <input type="text" ng-model="cat.firstname" name="fname" class="username form-control input-sm"
+                                       placeholder="Enter cat's first name" required="" ng-minlength="2" ng-maxlength="25"/>
+                                <p ng-show="myForm.fname.$error.minlength" class="help-block">First name is too short.</p>
+                                <p ng-show="myForm.fname.$error.maxlength" class="help-block">First name is too long.</p>
+                                <p ng-show="myForm.fname.$error.required &amp;&amp; !myForm.fname.$pristine" class="help-block">First name is required.</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" ng-class="{ 'has-error' : myForm.lname.$invalid &amp;&amp; !myForm.lname.$pristine}">
+                            <label class="col-md-2 col-md-offset-1 control-label">Last name</label>
+                            <div class="col-md-9">
+                                <input type="text" ng-model="cat.lastname" name="lname" class="username form-control input-sm"
+                                       placeholder="Enter cat's last name" required="" ng-minlength="2" ng-maxlength="25"/>
+                                <p ng-show="myForm.lname.$error.minlength" class="help-block">Last name is too short.</p>
+                                <p ng-show="myForm.lname.$error.maxlength" class="help-block">Last name is too long.</p>
+                                <p ng-show="myForm.lname.error.required &amp;&amp; !myForm.lname.$pristine" class="help-block">Last name is required.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6" ng-class="{ 'has-error' : myForm.age.$invalid &amp;&amp; !myForm.age.$pristine}">
+                            <label class="col-md-2 control-label" >Age</label>
+                            <div class="col-md-9">
+                                <input type="number" ng-model="cat.age" name="age" class="form-control input-sm"
+                                       placeholder="Enter your Age." required="" min="0" max="100" ng-pattern="/^\d+$/"/>
+                                <p ng-show="myForm.age.$error.required &amp;&amp; !myForm.age.$pristine" class="help-block">Age is required.</p>
+                                <p ng-show="myForm.age.$error.max &amp;&amp; !myForm.age.$pristine" class="help-block">Age must be lower than 100.</p>
+                                <p ng-show="myForm.age.$error.min &amp;&amp; !myForm.age.$pristine" class="help-block">Age must be higher than 0.</p>
+                                <p ng-show="myForm.age.$error.pattern &amp;&amp; !myForm.age.$pristine" class="help-block">Age must be an integer.</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="col-md-2 col-md-offset-1 control-label">Gender</label>
+                            <div class="col-md-9">
+                            <select class="input-sm" required="" ng-model="cat.gender" ng-options="gender for gender in genderTypes"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-actions floatRight pull-right">
+                            <div uib-tooltip="Provide all the information about a cat first" tooltip-enable="myForm.$invalid || myForm.$pristine" class="tooltip-style">
+                                <input type="submit" value="Add" class="btn btn-primary custom-width" ng-disabled="myForm.$invalid || myForm.$pristine" ng-style="{'pointer-events':(myForm.$invalid || myForm.$pristine) ? 'none' : ''}"/>
+                            </div>
+                            <div uib-tooltip="Nothing to reset" tooltip-enable="myForm.$pristine" class="tooltip-style">
+                                <button type="button" ng-click="resetForm()" class="btn btn-warning custom-width" ng-disabled="myForm.$pristine" ng-style="{'pointer-events':myForm.$pristine ? 'none' : ''}">Reset Form</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default panel-style">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><span class="lead">List of cats</span></div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="row">
+                        <th class="col-xs-1">ID</th>
+                        <th class="col-xs-3">FIRST NAME</th>
+                        <th class="col-xs-3">LAST NAME</th>
+                        <th class="col-xs-2">AGE</th>
+                        <th class="col-xs-2">GENDER</th>
+                        <th class="col-xs-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="cat in cats" class="row">
+                        <td class="col-xs-1">
+                            {{cat.id}}
+                        </td>
+                        <td class="col-xs-3">
+                            <span editable-text="cat.firstName" e-name="firstName" e-form="rowform" onbeforesave="checkFirstName($data)">
+                              {{cat.firstName}}
+                            </span>
+                        </td>
+                        <td class="col-xs-3">
+                            <span editable-text="cat.lastName" e-name="lastName" e-form="rowform" onbeforesave="checkLastName($data)">{{cat.lastName}}</span>
+                        </td>
+                        <td class="col-xs-2">
+                            <span editable-text="cat.age" e-name="age" e-form="rowform" onbeforesave="checkAge($data)">{{cat.age}}</span>
+                        </td>
+                        <td class="col-xs-2">
+                            <span editable-select="cat.gender" e-name="gender" e-form="rowform" e-ng-options="gender for gender in genderTypes" onbeforesave="checkGender($data)">
+                                {{ capitalize(cat.gender) }}
+                            </span>
+                        </td>
+
+                        <td style="white-space: nowrap" class="col-xs-1">
+                            <form editable-form="" name="rowform" onbeforesave="updateCat(cat.id, $data)"
+                                  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == cat">
+                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                    save
+                                </button>
+                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                    cancel
+                                </button>
+                            </form>
+                            <div class="buttons" ng-show="!rowform.$visible">
+                                <button type="button" ng-click="rowform.$show()" class="btn btn-success custom-width">Edit</button>
+                                <button type="button" ng-click="deleteCat(cat.id)" class="btn btn-danger custom-width">Remove</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

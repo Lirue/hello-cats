@@ -1,0 +1,20 @@
+.catBackground {
+    background-image: url("/Cats/img/cat_tile.png");
+}
+
+.container-style {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.panel-style {
+    padding: 50px;
+}
+
+.td-buttons-form {
+    style: "white-space: nowrap";
+}
+
+.tooltip-style {
+    display: inline-block;
+}
